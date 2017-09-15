@@ -4,47 +4,55 @@
 struct Game;
 struct Move;
 
-enum Winner{
+enum Player{
   RED,
   GREEN,
   NO_ONE,
-  DRAW
 };
 
 
 enum Board_state{
   EMPTY,
-  RED,
-  GREEN
+  BS_RED,
+  BS_GREEN
 };
 
 enum CONNECT4_ERROR{
   OK,
   POSITION,
-  TURN_PARITY,
+  WRONG_TURN,
   GRAVITY,
+  FULL_COLUMN	
 
   //...
 };
 
 struct Move
 {
-  Move(unsigned int column,Board_state player,Game& g);
+  Move(unsigned int column,Player player,Game& g);
   unsigned int column;
-  Board_state player;
+  Player player;
+  Game& g;
   CONNECT4_ERROR is_valid();
 };
 
 struct Game
 {
   Board_state data[6][7];
+  Player starter;
 
-  Game();
+  Game(Player starter=RED);
 
   void set(unsigned int row, unsigned column,Board_state state);
   Board_state get(unsigned int row, unsigned column);
 
-  Winner who_win();
+  unsigned int total_chips();
+
+  Player turn(); 
+
+  Player who_win();
+
+  bool is_over();
 
   CONNECT4_ERROR is_valid() const;
 

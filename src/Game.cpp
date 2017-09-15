@@ -1,22 +1,74 @@
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include "../include/Game.hpp"
 
-// most frequently you implement test cases as a free functions with automatic registration
-BOOST_AUTO_TEST_CASE( test1 )
-{
-  // reports 'error in "test1": test 2 == 1 failed'
-  BOOST_CHECK( 2 == 1 );
+
+
+
+Move::Move(unsigned int column,Player player,Game& g):column(column),player(player),g(g){
 }
 
-//____________________________________________________________________________//
+CONNECT4_ERROR Move::is_valid(){
 
-// each test file may contain any number of test cases; each test case has to have unique name
-BOOST_AUTO_TEST_CASE( test2 )
-{
-  int i = 0;
+CONNECT4_ERROR res = OK;
+if(column>6) res = POSITION;
+else if(g.get(5,column) != EMPTY) res = FULL_COLUMN;
+else if(g.turn() != player) res = WRONG_TURN;
 
-  // reports 'error in "test2": check i == 2 failed [0 != 2]'
-  BOOST_CHECK_EQUAL( i, 2 );
+return res;
+}
 
-  BOOST_CHECK_EQUAL( i, 0 );
+
+Game::Game(Player starter):starter(starter){
+
+}
+
+void Game::set(unsigned int row, unsigned column,Board_state state){
+data[row][column] = state;
+}
+
+Board_state Game::get(unsigned int row, unsigned column){
+return data[row][column];
+}
+
+unsigned int Game::total_chips(){
+
+}
+
+
+Player Game::turn(){
+int currentrow = 7;
+int totalred = 0;
+int totalgreen = 0;
+Player res;
+
+for (int i = 0; i<6; i++){
+	currentrow = 7;
+	for(int j = 0; j<7; j++){
+	if(this->get(i,j) == BS_RED) totalred++;
+	if(this->get(i,j) == BS_GREEN) totalgreen++;
+	else currentrow--;
+	if (currentrow == 0) i = 6;
+	}
+}
+if (totalred >= totalgreen && this->starter == GREEN) res = GREEN;
+else res = RED;
+
+return res;
+}
+
+Player Game::who_win(){
+
+}
+
+bool Game::is_over(){}
+
+CONNECT4_ERROR Game::is_valid() const{
+
+}
+
+bool Game::operator==(const Game &other) const{
+
+}
+
+CONNECT4_ERROR Game::apply(Move m){
+
 }

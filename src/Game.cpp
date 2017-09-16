@@ -30,45 +30,109 @@ return data[row][column];
 }
 
 unsigned int Game::total_chips(){
+int res = 0;
+int current_row = 7;
 
+for (int i = 0; i<6; i++){
+	current_row = 7;
+	for(int j = 0; j<7; j++){
+	if(this->get(i,j) != EMPTY) res++;
+	else current_row--;
+	if (current_row == 0) i = 6;
+	}
+}
+return res;
 }
 
 
 Player Game::turn(){
-int currentrow = 7;
-int totalred = 0;
-int totalgreen = 0;
+int chips = this->total_chips();
+int mod = chips%2;
 Player res;
-
-for (int i = 0; i<6; i++){
-	currentrow = 7;
-	for(int j = 0; j<7; j++){
-	if(this->get(i,j) == BS_RED) totalred++;
-	if(this->get(i,j) == BS_GREEN) totalgreen++;
-	else currentrow--;
-	if (currentrow == 0) i = 6;
-	}
-}
-if (totalred >= totalgreen && this->starter == GREEN) res = GREEN;
+if (mod == 0) res = this->starter;
+else if (this->starter == RED && mod == 1) res = GREEN;
 else res = RED;
+
 
 return res;
 }
 
 Player Game::who_win(){
+Player winner = NO_ONE;
+//vertical
+for (int i = 0; i<4; i++){
+	for(int j = 0; j<6; j++){
+		if(data[i][j] == BS_RED && data[i+1][j] == BS_RED && data[i+2][j] == BS_RED && data[i+3][j] == BS_RED) winner = RED;
+		else if(data[i][j] == BS_GREEN && data[i+1][j] == BS_GREEN && data[i+2][j] == BS_GREEN && data[i+3][j] == BS_GREEN) winner = GREEN;
+	}
+} 
+
+//horizontal
+for (int i = 0; i<3; i++){
+	for(int j = 0; j<7; j++){
+		if(data[i][j] == BS_RED && data[i][j+1] == BS_RED && data[i][j+2] == BS_RED && data[i][j+3] == BS_RED) winner = RED;
+		else if(data[i][j] == BS_GREEN && data[i][j+1] == BS_GREEN && data[i][j+2] == BS_GREEN && data[i][j+3] == BS_GREEN) winner = GREEN;
+	}
+} 
+
+//diagonal1
+for (int i = 3; i<7; i++){
+	for(int j = 0; j<3; j++){
+		if(data[i][j] == BS_RED && data[i-1][j+1] == BS_RED && data[i-2][j+2] == BS_RED && data[i-3][j+3] == BS_RED) winner = RED;
+		else if(data[i][j] == BS_GREEN && data[i-1][j+1] == BS_GREEN && data[i-2][j+2] == BS_GREEN && data[i-3][j+3] == BS_GREEN) winner = GREEN;
+	}
+}
+//diagonal2
+for (int i = 3; i<7; i++){
+	for(int j = 3; j<6; j++){
+		if(data[i][j] == BS_RED && data[i-1][j-1] == BS_RED && data[i-2][j-2] == BS_RED && data[i-3][j-3] == BS_RED) winner = RED;
+		else if(data[i][j] == BS_GREEN && data[i-1][j-1] == BS_GREEN && data[i-2][j-2] == BS_GREEN && data[i-3][j-3] == BS_GREEN) winner = GREEN;
+	}
+}
+return winner;
+
+
 
 }
 
-bool Game::is_over(){}
+bool Game::is_over(){
+bool res=false;
+if(this->who_win() == RED || this->who_win() == GREEN || (this->who_win() == NO_ONE && this->total_chips() == 42)) res = true;
+return res;
+}
 
 CONNECT4_ERROR Game::is_valid() const{
+		
 
 }
 
 bool Game::operator==(const Game &other) const{
 
+bool res = (starter == other.starter);
+while (res){
+	for (int i = 0; i<7; i++){
+		for(int j = 0; j<6; j++){
+		res = (data[i][j] == other.data[i][j]);
+}
+}
+}
+return res;
 }
 
 CONNECT4_ERROR Game::apply(Move m){
 
+CONNECT4_ERROR res=OK;
+int i=0;
+Board_state b;
+
+if (m.player == RED) b = BS_RED;
+else b = BS_GREEN;
+if (this->is_valid() && m.is_valid()){
+while (data[i][m.column] != EMPTY){
+ i++;
+}
+
+data[i][m.column] = b;
+}
+return res;
 }

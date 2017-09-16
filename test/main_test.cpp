@@ -1,16 +1,14 @@
-#include <iostream>
-
-#define BOOST_TEST_MODULE MyTest
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE Hello
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE( my_test )
+int add(int i, int j)
 {
-  BOOST_CHECK( 1 == 1 );
-  BOOST_CHECK( 1 == 0 );
+    return i + j;
 }
 
-int main(int argc, char *argv[])
+BOOST_AUTO_TEST_CASE(universeInOrder)
 {
-  std::cout << "hello" << "\n";
-  return 0;
+    BOOST_CHECK(add(2, 2) == 5);
 }
+

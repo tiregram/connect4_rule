@@ -17,7 +17,7 @@ target_link_libraries(c4rule_ut
                       ${Boost_SYSTEM_LIBRARY}
                       ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                       )
-
+target_link_libraries(c4rule_ut c4rule)
 
 
 

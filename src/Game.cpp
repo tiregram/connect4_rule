@@ -72,3 +72,11 @@ bool Game::operator==(const Game &other) const{
 CONNECT4_ERROR Game::apply(Move m){
 
 }
+
+CONNECT4_ERROR Game::play(unsigned int rows[]){}
+
+std::ostream& operator<<(std::ostream& os, const Game& c)
+{
+  os << "Game";
+  return os;
+}

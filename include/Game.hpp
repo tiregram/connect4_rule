@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 
 struct Game;
 struct Move;
@@ -59,5 +59,10 @@ struct Game
   bool operator==(const Game &other) const;
 
   CONNECT4_ERROR apply(Move m);
+  CONNECT4_ERROR play(unsigned int row);
+  CONNECT4_ERROR play(unsigned int rows[]);
+
 
 };
+
+std::ostream& operator<<(std::ostream& os, const Game& c);

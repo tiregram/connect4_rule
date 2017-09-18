@@ -71,11 +71,11 @@ BOOST_AUTO_TEST_CASE(Game_init_Test)
   Game g1 = Game();
   Game* g2 = new Game();
   //  Game g3 = g1;
-  BOOST_CHECK_EQUAL(g0.is_valid(), 0);
-  BOOST_CHECK_EQUAL(g0.is_valid(), true);
+  BOOST_CHECK_EQUAL(g0.turn(), 0);
+  BOOST_CHECK_EQUAL(g0.is_valid(), OK);
   BOOST_CHECK_EQUAL(g0.is_over(), false);
-  BOOST_CHECK_EQUAL(g1.is_valid(), true);
-  BOOST_CHECK_EQUAL(g2->is_valid(), true);
+  BOOST_CHECK_EQUAL(g1.is_valid(), OK);
+  BOOST_CHECK_EQUAL(g2->is_valid(), OK);
 
 
   delete g2;

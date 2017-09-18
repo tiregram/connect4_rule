@@ -17,12 +17,17 @@ enum Board_state{
   BS_GREEN
 };
 
+Board_state Player_to_Board_state(Player player);
+Player Board_state_to_Player(Board_state bs);
+
+
 enum CONNECT4_ERROR{
   OK,
   POSITION,
   WRONG_TURN,
   GRAVITY,
-  FULL_COLUMN	
+  FULL_COLUMN,
+  WRONG_PARITY	
 
   //...
 };
@@ -33,7 +38,7 @@ struct Move
   unsigned int column;
   Player player;
   Game& g;
-  CONNECT4_ERROR is_valid();
+  CONNECT4_ERROR is_valid() const;
 };
 
 struct Game
@@ -44,15 +49,15 @@ struct Game
   Game(Player starter=RED);
 
   void set(unsigned int row, unsigned column,Board_state state);
-  Board_state get(unsigned int row, unsigned column);
+  Board_state get(unsigned int row, unsigned column) const;
 
-  unsigned int total_chips();
+  unsigned int total_chips() const;
 
-  Player turn(); 
+  Player turn() const; 
 
-  Player who_win();
+  Player who_win() const;
 
-  bool is_over();
+  bool is_over() const;
 
   CONNECT4_ERROR is_valid() const;
 
@@ -62,7 +67,9 @@ struct Game
   CONNECT4_ERROR play(unsigned int row);
   CONNECT4_ERROR play(unsigned int rows[]);
 
-
+  private:
+  bool is_valid_gravity() const;
+  bool is_valid_turn_parity() const;
 };
 
 std::ostream& operator<<(std::ostream& os, const Game& c);

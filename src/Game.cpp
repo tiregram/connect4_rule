@@ -136,3 +136,11 @@ data[i][m.column] = b;
 }
 return res;
 }
+
+CONNECT4_ERROR Game::play(unsigned int rows[]){}
+
+std::ostream& operator<<(std::ostream& os, const Game& c)
+{
+  os << "Game";
+  return os;
+}

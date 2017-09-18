@@ -6,15 +6,64 @@
 
 BOOST_AUTO_TEST_CASE(Game_win_Test)
 {
+  // red win columns
   Game g(RED);
   unsigned int s[] ={0,1,0,1,0,1,0};
   g.play(s);
   BOOST_CHECK_EQUAL(g.who_win(),RED);
 
+  // green win columns
   Game g2(GREEN);
   unsigned int s2[] ={0,1,0,1,0,1,0};
   g2.play(s2);
   BOOST_CHECK_EQUAL(g2.who_win(),GREEN);
+
+  // red row win
+  Game g3(RED);
+  unsigned int s3[] ={0,0,1,1,2,2,3};
+  g.play(s3);
+  BOOST_CHECK_EQUAL(g3.who_win(),RED);
+
+  // green row win
+  Game g4(GREEN);
+  unsigned int s4[] ={0,0,1,1,2,2,3};
+  g2.play(s4);
+  BOOST_CHECK_EQUAL(g4.who_win(),GREEN);
+
+  // red diag1 win
+  Game g5(RED);
+  unsigned int s5[] ={0,1,
+                      1,2,
+                      3,2,
+                      2,3,
+                      3,3,
+                      3};
+  g2.play(s5);
+  BOOST_CHECK_EQUAL(g5.who_win(),GREEN);
+
+  /// green diag1 win
+  Game g6(GREEN);
+  unsigned int s6[] ={0,1,
+                      1,2,
+                      3,2,
+                      2,3,
+                      3,3,
+                      3};
+
+  g2.play(s6);
+  BOOST_CHECK_EQUAL(g6.who_win(),GREEN);
+
+
+
+  Game g7(GREEN);
+  for (int i = 0; i < 6; i++) {
+    for (int j = 0; j < 7; j++) {
+      g7.play(j);
+    }
+  }
+  
+  BOOST_CHECK_EQUAL(g7.is_over(),true);
+
 }
 
 

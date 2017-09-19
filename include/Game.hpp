@@ -45,15 +45,17 @@ struct Game
 {
   Board_state data[6][7];
   Player starter;
+  Player current_turn;
 
   Game(Player starter=RED);
 
   void set(unsigned int row, unsigned column,Board_state state);
   Board_state get(unsigned int row, unsigned column) const;
 
+  void set_turn(Player player);
+  Player get_turn();
+  
   unsigned int total_chips() const;
-
-  Player turn() const; 
 
   Player who_win() const;
 
@@ -70,6 +72,7 @@ struct Game
   private:
   bool is_valid_gravity() const;
   bool is_valid_turn_parity() const;
+  int get_first_empty_space(int column);
 };
 
 std::ostream& operator<<(std::ostream& os, const Game& c);

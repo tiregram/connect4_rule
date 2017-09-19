@@ -52,9 +52,6 @@ struct Game
 
   void set(unsigned int row, unsigned column,Board_state state);
   Board_state get(unsigned int row, unsigned column) const;
-
-  void set_turn(Player player);
-  Player get_turn();
   
   unsigned int total_chips() const;
 
@@ -62,7 +59,7 @@ struct Game
 
 
   void set_turn(Player p);
-  Player get_turn();
+  Player get_turn() const;
 
 
   bool is_over() const;

@@ -52,8 +52,9 @@ Board_state Game::get(unsigned int row, unsigned column) const{
 	return data[row][column];
 }
 
-  void set_turn(Player player){}
-  Player get_turn(){}
+  void Game::set_turn(Player player){}
+  Player Game::get_turn() const{
+  return RED;}
 
 unsigned int Game::total_chips() const{
 	int res = 0;
@@ -181,7 +182,7 @@ bool Game::is_valid_turn_parity() const{
 
 CONNECT4_ERROR Game::is_valid() const{
 	if (!is_valid_gravity()) return GRAVITY;
-	if (!is_valid_turn_parity()) return TURN	_PARITY;		
+	if (!is_valid_turn_parity()) return TURN_PARITY;		
 	return OK;
 }
 

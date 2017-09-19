@@ -52,9 +52,12 @@ Board_state Game::get(unsigned int row, unsigned column) const{
 	return data[row][column];
 }
 
-  void Game::set_turn(Player player){}
-  Player Game::get_turn() const{
-  return RED;}
+void Game::set_turn(Player player){
+  	current_turn = player;
+}
+Player Game::get_turn() const{
+	return current_turn;
+}
 
 unsigned int Game::total_chips() const{
 	int res = 0;
@@ -227,8 +230,15 @@ CONNECT4_ERROR Game::apply(Move m){
 	return OK;
 }
 
-CONNECT4_ERROR Game::play(unsigned int row){}
-CONNECT4_ERROR Game::play(unsigned int rows[]){}
+CONNECT4_ERROR Game::play(unsigned int row){
+	Move m(row,get_turn(),*this);
+	return apply(m);
+}
+CONNECT4_ERROR Game::play(std::vector<unsigned int> const &rows){
+	for(unsigned int i = 0; i<rows.size(); i++){
+		play(rows[i]);
+	}
+}
 
 std::ostream& operator<<(std::ostream& os, const Game& c)
 {

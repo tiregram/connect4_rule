@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 struct Game;
 struct Move;
@@ -70,7 +71,7 @@ struct Game
 
   CONNECT4_ERROR apply(Move m);
   CONNECT4_ERROR play(unsigned int row);
-  CONNECT4_ERROR play(unsigned int rows[]);
+  CONNECT4_ERROR play(std::vector<unsigned int> const &rows);
 
   private:
   bool is_valid_gravity() const;

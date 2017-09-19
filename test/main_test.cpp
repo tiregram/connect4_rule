@@ -3,36 +3,39 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE Hello
 #include <boost/test/unit_test.hpp>
+#include <vector>
+
+typedef std::vector<unsigned int> Vui;
 
 BOOST_AUTO_TEST_CASE(Game_win_Test)
 {
   // red win columns
   Game g(RED);
-  unsigned int s[] ={0,1,0,1,0,1,0};
+  Vui s ={0,1,0,1,0,1,0};
   g.play(s);
   BOOST_CHECK_EQUAL(g.who_win(),RED);
 
   // green win columns
   Game g2(GREEN);
-  unsigned int s2[] ={0,1,0,1,0,1,0};
+  Vui s2 ={0,1,0,1,0,1,0};
   g2.play(s2);
   BOOST_CHECK_EQUAL(g2.who_win(),GREEN);
 
   // red row win
   Game g3(RED);
-  unsigned int s3[] ={0,0,1,1,2,2,3};
+  Vui s3 ={0,0,1,1,2,2,3};
   g.play(s3);
   BOOST_CHECK_EQUAL(g3.who_win(),RED);
 
   // green row win
   Game g4(GREEN);
-  unsigned int s4[] ={0,0,1,1,2,2,3};
+  Vui s4 ={0,0,1,1,2,2,3};
   g2.play(s4);
   BOOST_CHECK_EQUAL(g4.who_win(),GREEN);
 
   // red diag1 win
   Game g5(RED);
-  unsigned int s5[] ={0,1,
+  Vui s5 ={0,1,
                       1,2,
                       3,2,
                       2,3,
@@ -43,7 +46,7 @@ BOOST_AUTO_TEST_CASE(Game_win_Test)
 
   /// green diag1 win
   Game g6(GREEN);
-  unsigned int s6[] ={0,1,
+  Vui s6 ={0,1,
                       1,2,
                       3,2,
                       2,3,
@@ -56,8 +59,8 @@ BOOST_AUTO_TEST_CASE(Game_win_Test)
 
 
   Game g7(GREEN);
-  for (int i = 0; i < 6; i++) {
-    for (int j = 0; j < 7; j++) {
+  for (unsigned int i = 0; i < 6; i++) {
+    for (unsigned int j = 0; j < 7; j++) {
       g7.play(j);
     }
   }
@@ -122,14 +125,14 @@ BOOST_AUTO_TEST_CASE(Game_valid_Test)
   BOOST_CHECK_EQUAL( g2.is_valid(), TURN_PARITY);
 
   Game g3(RED);
-  unsigned int  p3[] = {0,0,0,0,0,0};
+  Vui  p3 = {0,0,0,0,0,0};
   g3.play(p3);
   int c = 0;
   BOOST_CHECK_EQUAL(g3.play(c),FULL_COLUMN);
 
 
   Game g5(RED);
-  unsigned int  p5[] = {0,0,0,0,0,0};
+  Vui  p5 = {0,0,0,0,0,0};
   g5.play(p5);
   Move m(0, g5.get_turn(),g5);
   BOOST_CHECK_EQUAL(g5.apply(m),FULL_COLUMN);

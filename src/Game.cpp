@@ -181,7 +181,7 @@ bool Game::is_valid_turn_parity() const{
 
 CONNECT4_ERROR Game::is_valid() const{
 	if (!is_valid_gravity()) return GRAVITY;
-	if (!is_valid_turn_parity()) return WRONG_PARITY;		
+	if (!is_valid_turn_parity()) return TURN	_PARITY;		
 	return OK;
 }
 

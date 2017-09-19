@@ -22,7 +22,8 @@ enum CONNECT4_ERROR{
   POSITION,
   WRONG_TURN,
   GRAVITY,
-  FULL_COLUMN	
+  FULL_COLUMN,
+  TURN_PARITY
 
   //...
 };
@@ -48,7 +49,10 @@ struct Game
 
   unsigned int total_chips();
 
-  Player turn(); 
+  Player turn(); // TODO remove this one for get_turn
+
+  void set_turn(Player p);
+  Player get_turn();
 
   Player who_win();
 

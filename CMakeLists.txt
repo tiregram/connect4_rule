@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8.11)
 project (Connect4_rule)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
-
+set(CMAKE_CXX_STANDARD 11)
 # lib build
 file(GLOB_RECURSE C4_FILE_LIB src/*.cpp)
 add_library(c4rule SHARED ${C4_FILE_LIB})

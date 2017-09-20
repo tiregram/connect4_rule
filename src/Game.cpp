@@ -8,16 +8,18 @@ Board_state Player_to_Board_state(Player player){
 	switch(player){
 		case RED:return BS_RED;break;
 		case GREEN:return BS_GREEN;break;
+		case NO_ONE:throw(std::string("Invalid conversion NO_ONE"));break;
 		}
-	throw(std::string("Invalid conversion NO_ONE"));
+	return EMPTY;
 }
 
 Player Board_state_to_Player(Board_state bs){
 	switch(bs){
 		case BS_RED:return RED;break;
 		case BS_GREEN:return GREEN;break;
+		case EMPTY:throw(std::string("Invalid conversion EMPTY"));break;
 	}
-	throw(std::string("Invalid conversion EMPTY"));
+	return NO_ONE;
 }
 
 
@@ -177,7 +179,11 @@ bool Game::is_valid_turn_parity() const{
 		}
 	}
 	if (this->starter == RED && (res_red < res_green)) return false;
+	if (this->starter == RED && this->current_turn == RED && (res_red > res_green)) return false;
+	if (this->starter == RED && this->current_turn == GREEN && (res_red <= res_green)) return false;
 	if (this->starter == GREEN && (res_red > res_green)) return false;
+	if (this->starter == GREEN && this->current_turn == GREEN && (res_red < res_green)) return false;
+	if (this->starter == GREEN && this->current_turn == RED && (res_red >= res_green)) return false;
 	if (res_red - res_green > 2 || res_red - res_green < -2 ) return false;
 
 	return true;
@@ -219,10 +225,11 @@ CONNECT4_ERROR Game::apply(Move m){
 	CONNECT4_ERROR game_valid = this->is_valid();
 	CONNECT4_ERROR move_valid = m.is_valid();
 	
-	int i=0;
 	if (game_valid == OK && move_valid == OK){
 		
 	data[get_first_empty_space(m.column)][m.column] = Player_to_Board_state(m.player);
+	if (get_turn() == RED) set_turn(GREEN);
+		else set_turn(RED);
 	}
 	else if (move_valid != OK) return move_valid;
 	else if (game_valid != OK) return game_valid;
@@ -236,12 +243,22 @@ CONNECT4_ERROR Game::play(unsigned int row){
 }
 CONNECT4_ERROR Game::play(std::vector<unsigned int> const &rows){
 	for(unsigned int i = 0; i<rows.size(); i++){
-		play(rows[i]);
+		CONNECT4_ERROR error = play(rows[i]);
+		if (error != OK) return error;
 	}
+	return OK;
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& c)
 {
-  os << "Game";
+  os << "Game starter: "<<c.starter<<" Current turn: "<< c.current_turn << std::endl;
+  for (int i = 5; i>-1;i--){
+  	os << std::endl << "|";
+  	for (int j = 0; j<7;j++){
+  	os << c.get(i,j) << "|";
+  	}
+  }
+  os << std::endl;
+  
   return os;
 }

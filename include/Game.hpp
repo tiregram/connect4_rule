@@ -8,14 +8,14 @@ struct Move;
 enum Player{
   RED,
   GREEN,
-  NO_ONE,
+  NO_ONE
 };
 
 
 enum Board_state{
-  EMPTY,
   BS_RED,
-  BS_GREEN
+  BS_GREEN,
+  EMPTY
 };
 
 Board_state Player_to_Board_state(Player player);

@@ -68,10 +68,11 @@ struct Game
   CONNECT4_ERROR is_valid() const;
 
   bool operator==(const Game &other) const;
+  bool possible_posterior_game(const Game &other) const;
 
   CONNECT4_ERROR apply(Move m);
-  CONNECT4_ERROR play(unsigned int row);
-  CONNECT4_ERROR play(std::vector<unsigned int> const &rows);
+  CONNECT4_ERROR play(unsigned int column);
+  CONNECT4_ERROR play(std::vector<unsigned int> const &columns);
 
   private:
   bool is_valid_gravity() const;

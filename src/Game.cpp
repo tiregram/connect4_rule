@@ -254,6 +254,7 @@ CONNECT4_ERROR Game::apply(Move m){
 //Function to compare two boards, to know if the other board could be a continuation of the implicit board.
 bool Game::possible_posterior_game(const Game &other) const{
 	if(starter != other.starter) return false;
+	if(*this == other) return false;
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<7; j++){
 			if(get(i,j) != EMPTY && other.get(i,j) == EMPTY) return false;

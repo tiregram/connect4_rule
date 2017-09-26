@@ -152,14 +152,40 @@ BOOST_AUTO_TEST_CASE(Game_post_prev_Test)
 {
   Game g1;
   Game g2;
-  BOOST_CHECK_EQUAL(g1.postr(g2), false);
+  BOOST_CHECK_EQUAL(g1.possible_posterior_game(g2), false);
   g1.play(1);
-  BOOST_CHECK_EQUAL(g1.post(g2), false);
-  BOOST_CHECK_EQUAL(g1.post(g2), true);
+  BOOST_CHECK_EQUAL(g1.possible_posterior_game(g2), false);
+  BOOST_CHECK_EQUAL(g1.possible_posterior_game(g1), false);
+  BOOST_CHECK_EQUAL(g2.possible_posterior_game(g1), true);
+
+  Game g3;
+  Game g4;
+  Vui p3 = {0,0,1,1};
+  Vui p4 = {1,1,0,0,1};
+  g3.play(p3);
+  g4.play(p4);
+
+  BOOST_CHECK_EQUAL(g3.possible_posterior_game(g4), true);
+  BOOST_CHECK_EQUAL(g4.possible_posterior_game(g3), false);
+
+  Game g5(GREEN) ;
+  Game g6(RED)  ;
+  BOOST_CHECK_EQUAL(g5.possible_posterior_game(g6), false);
+  g6.play(1);
+  BOOST_CHECK_EQUAL(g5.possible_posterior_game(g6), false);
 
 
+  Game gt;
 
+  Vui pt = {0,0,1,1,2,2,3,3,4,4};
+  gt.play(pt);
 
+  for (int i = 0; i < 7; i++) {
+    Game gt2 = Game();
+    gt2.play(pt);
+    gt2.play(i);
+    BOOST_CHECK_EQUAL(gt.possible_posterior_game(gt2), true);
+  }
 
 }
 

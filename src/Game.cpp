@@ -1,5 +1,9 @@
 #include "../include/Game.hpp"
 
+/*
+Implementation of game mechanics and rules of Connect4 for NAO.
+Project by EPS group I: Marveen Parras, Arthur Margerit and Derek Burrell.
+*/
 
 Board_state Player_to_Board_state(Player player){
 	switch(player){
@@ -10,6 +14,7 @@ Board_state Player_to_Board_state(Player player){
 	return EMPTY;
 }
 
+//Function to switch from Board_state to Player
 Player Board_state_to_Player(Board_state bs){
 	switch(bs){
   case BS_RED:return RED;break;
@@ -19,22 +24,19 @@ Player Board_state_to_Player(Board_state bs){
 	return NO_ONE;
 }
 
-
-
+//Default constructor of Move
 Move::Move(unsigned int column,Player player,Game& g):column(column),player(player),g(g){
 }
 
+//Checks if Move is valid. Returns POSITION if the column is not valid, FULL_COLUMN if the column is full, WRONG_TURN if it's not the correct player, and OK if the play is valid.
 CONNECT4_ERROR Move::is_valid() const{
-
-	CONNECT4_ERROR res = OK;
-	if(column>6) res = POSITION;
-	else if(g.get(5,column) != EMPTY) res = FULL_COLUMN;
-	else if(g.get_turn() != player) res = WRONG_TURN;
-
-	return res;
+	if(column>6) return POSITION;
+	if(g.get(5,column) != EMPTY) return FULL_COLUMN;
+	if(g.get_turn() != player) return WRONG_TURN;
+	return OK;
 }
 
-
+//Default constructor of Game. Fills the board with EMPTY state.
 Game::Game(Player starter):starter(starter),current_turn(starter){
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<7; j++){
@@ -43,25 +45,30 @@ Game::Game(Player starter):starter(starter),current_turn(starter){
 	}
 }
 
+//Set for position states
 void Game::set(unsigned int row, unsigned column,Board_state state){
 	data[row][column] = state;
 }
 
+//Get for position states
 Board_state Game::get(unsigned int row, unsigned column) const{
 	return data[row][column];
 }
 
+//Set for curent turn
 void Game::set_turn(Player player){
   current_turn = player;
 }
+
+//Get for current turn
 Player Game::get_turn() const{
 	return current_turn;
 }
 
+//Function to calculate total number of chips in-game
 unsigned int Game::total_chips() const{
 	int res = 0;
 	int current_row = 7;
-
 	for (int i = 0; i<6; i++){
 		current_row = 7;
 		for(int j = 0; j<7; j++){
@@ -72,7 +79,6 @@ unsigned int Game::total_chips() const{
 	}
 	return res;
 }
-
 
 /*Player Game::turn() const{
 	int chips = this->total_chips();
@@ -94,9 +100,10 @@ Player Game::who_win() const{
           (data[i  ][j] == data[i+2][j])){
 				return Board_state_to_Player(data[i][j]);
 			}
-		} 
+		}
 	}
-  //horizontal
+//Horizontal check
+
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<4; j++){
 			if(	(data[i  ][j] != EMPTY) &&
@@ -106,9 +113,11 @@ Player Game::who_win() const{
 				return Board_state_to_Player(data[i][j]);
 			}
 		}
-	} 
 
-  //diagonal ascending
+	}
+
+//Diagonal Ascending Check
+
 	for (int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++){
 			if(	(data[i][j] != EMPTY) &&
@@ -121,7 +130,8 @@ Player Game::who_win() const{
 
 		}
 	}
-  //diagonal descending
+//Diagonal Descending Check
+
 	for (int i = 0; i<3; i++){
 		for(int j = 3; j<7; j++){
 			if(	(data[i][j] != EMPTY) &&
@@ -137,7 +147,9 @@ Player Game::who_win() const{
 	return NO_ONE;
 }
 
+//Check if game is over.
 bool Game::is_over() const{
+
 	if(	this->who_win() == RED ||
       this->who_win() == GREEN ||
       (this->who_win() == NO_ONE &&
@@ -146,6 +158,7 @@ bool Game::is_over() const{
 	return false;
 }
 
+//Check if no impossible case of chip being over an empty spot is on the current board(will be useful to confirm NAO vision read)
 bool Game::is_valid_gravity() const{
 	for(int j = 0; j<7; j++){
 		bool found_empty = false;
@@ -160,8 +173,8 @@ bool Game::is_valid_gravity() const{
 	return true;
 }
 
+//Check if the turns have been respected and the current board has a normal state.
 bool Game::is_valid_turn_parity() const{
-
 	int res_green = 0;
 	int res_red = 0;
 	int current_row = 7;
@@ -182,18 +195,18 @@ bool Game::is_valid_turn_parity() const{
 	if (this->starter == GREEN && this->current_turn == GREEN && (res_red < res_green)) return false;
 	if (this->starter == GREEN && this->current_turn == RED && (res_red >= res_green)) return false;
 	if (res_red - res_green > 2 || res_red - res_green < -2 ) return false;
-
 	return true;
 }
 
+//Checks if both gravity and parity are respected
 CONNECT4_ERROR Game::is_valid() const{
 	if (!is_valid_gravity()) return GRAVITY;
 	if (!is_valid_turn_parity()) return TURN_PARITY;
 	return OK;
 }
 
+//Compares two boards. They are only considered equal if the same player has started and the exact same positions are filled.
 bool Game::operator==(const Game &other) const{
-
 	if (starter != other.starter){
 		return false;
 	}
@@ -208,7 +221,7 @@ bool Game::operator==(const Game &other) const{
 	return true;
 }
 
-//Requires
+//Required to check which is the first space the chip can be stored
 int Game::get_first_empty_space(int column){
 
 	for (int i = 0; i<6; i++){
@@ -217,6 +230,7 @@ int Game::get_first_empty_space(int column){
 	return -1;
 }
 
+//Applies a move, checking if the move and the game are valid before doing so.
 CONNECT4_ERROR Game::apply(Move m){
 
 	CONNECT4_ERROR game_valid = this->is_valid();
@@ -224,37 +238,56 @@ CONNECT4_ERROR Game::apply(Move m){
 
 	if (game_valid == OK && move_valid == OK){
     data[get_first_empty_space(m.column)][m.column] = Player_to_Board_state(m.player);
-    if (get_turn() == RED) set_turn(GREEN);
-		else set_turn(RED);
+    if (get_turn() == RED)
+      {set_turn(GREEN);}
+		else
+      { set_turn(RED);}
 	}
-	else if (move_valid != OK) return move_valid;
-	else if (game_valid != OK) return game_valid;
+	else if (move_valid != OK)
+    return move_valid;
+	else if (game_valid != OK)
+    return game_valid;
 
 	return OK;
 }
 
-CONNECT4_ERROR Game::play(unsigned int row){
-	Move m(row,get_turn(),*this);
+//Function to compare two boards, to know if the other board could be a continuation of the implicit board.
+bool Game::possible_posterior_game(const Game &other) const{
+	if(starter != other.starter) return false;
+	for (int i = 0; i<6; i++){
+		for(int j = 0; j<7; j++){
+			if(get(i,j) != EMPTY && other.get(i,j) == EMPTY) return false;
+			if(get(i,j) == BS_RED && other.get(i,j) == BS_GREEN) return false;
+			if(get(i,j) == BS_GREEN && other.get(i,j) == BS_RED) return false;
+		}
+	}
+	return true;
+}
+
+//Testing function to just play on a specific column without caring whose turn it is.
+CONNECT4_ERROR Game::play(unsigned int column){
+	Move m(column,get_turn(),*this);
 	return apply(m);
 }
-CONNECT4_ERROR Game::play(std::vector<unsigned int> const &rows){
-	for(unsigned int i = 0; i<rows.size(); i++){
-		CONNECT4_ERROR error = play(rows[i]);
+
+//Testing function to do multiple plays in a row
+CONNECT4_ERROR Game::play(std::vector<unsigned int> const &columns){
+	for(unsigned int i = 0; i<columns.size(); i++){
+		CONNECT4_ERROR error = play(columns[i]);
 		if (error != OK) return error;
 	}
 	return OK;
 }
 
-std::ostream& operator<<(std::ostream& os, const Game& c)
-{
-  os << "Game starter: "<<c.starter<<" Current turn: "<< c.current_turn << std::endl;
-  for (int i = 5; i>-1;i--){
-  	os << std::endl << "|";
-  	for (int j = 0; j<7;j++){
-      os << c.get(i,j) << "|";
+//Testing function to output the current game on the terminal
+std::ostream& operator<<(std::ostream& os, const Game& c){
+	os << "Game starter: "<<" Current turn: "<< c.get_turn() << std::endl;
+	for (int i = 5; i>-1;i--){
+  		os << std::endl << "|";
+  		for (int j = 0; j<7;j++){
+  			os << c.get(i,j) << "|";
+  		}
   	}
-  }
-  os << std::endl;
-
-  return os;
+  	os << std::endl;
+  	return os;
 }

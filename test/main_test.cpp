@@ -23,14 +23,14 @@ BOOST_AUTO_TEST_CASE(Game_win_Test)
 
   // red row win
   Game g3(RED);
-  
+
   Vui s3 = {0,0,1,1,2,2,3} ;
   g3.play(s3);
   BOOST_CHECK_EQUAL(g3.who_win(),RED);
 
   // green row win
   Game g4(GREEN);
-  
+
   Vui s4 = {0,0,1,1,2,2,3};
   g4.play(s4);
   BOOST_CHECK_EQUAL(g4.who_win(),GREEN);
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(Game_win_Test)
                       3,4,
                       3};
   g6.play(s6);
-		
+
   BOOST_CHECK_EQUAL(g6.who_win(),GREEN);
 
 
@@ -128,14 +128,14 @@ BOOST_AUTO_TEST_CASE(Game_valid_Test)
 Change to OK?*/
 
   Game g3(RED);
-  Vui  p3 = {0,0,0,0,0,0}; 
+  Vui  p3 = {0,0,0,0,0,0};
   g3.play(p3);
   int c = 0;
   BOOST_CHECK_EQUAL(g3.play(c),FULL_COLUMN);
 
 
   Game g5(RED);
-  Vui  p5 = {0,0,0,0,0,0};	
+  Vui  p5 = {0,0,0,0,0,0};
   g5.play(p5);
   Move m(0, g5.get_turn(),g5);
   BOOST_CHECK_EQUAL(g5.apply(m),FULL_COLUMN);
@@ -148,8 +148,22 @@ Change to OK?*/
 
 }
 
-BOOST_AUTO_TEST_CASE(Game_init_Test)
+BOOST_AUTO_TEST_CASE(Game_post_prev_Test)
+{
+  Game g1;
+  Game g2;
+  BOOST_CHECK_EQUAL(g1.postr(g2), false);
+  g1.play(1);
+  BOOST_CHECK_EQUAL(g1.post(g2), false);
+  BOOST_CHECK_EQUAL(g1.post(g2), true);
 
+
+
+
+
+}
+
+BOOST_AUTO_TEST_CASE(Game_init_Test)
 {
   Game g_r1;
   Game g_r2;
@@ -171,8 +185,6 @@ BOOST_AUTO_TEST_CASE(Game_init_Test)
   BOOST_CHECK_EQUAL(g2->is_valid(), OK);
 
   delete g2;
-
-
 
 }
 

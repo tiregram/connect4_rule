@@ -1,23 +1,20 @@
 #include "../include/Game.hpp"
 
 
-
-
-
 Board_state Player_to_Board_state(Player player){
 	switch(player){
-		case RED:return BS_RED;break;
-		case GREEN:return BS_GREEN;break;
-		case NO_ONE:throw(std::string("Invalid conversion NO_ONE"));break;
-		}
+  case RED:return BS_RED;break;
+  case GREEN:return BS_GREEN;break;
+  case NO_ONE:throw(std::string("Invalid conversion NO_ONE"));break;
+  }
 	return EMPTY;
 }
 
 Player Board_state_to_Player(Board_state bs){
 	switch(bs){
-		case BS_RED:return RED;break;
-		case BS_GREEN:return GREEN;break;
-		case EMPTY:throw(std::string("Invalid conversion EMPTY"));break;
+  case BS_RED:return RED;break;
+  case BS_GREEN:return GREEN;break;
+  case EMPTY:throw(std::string("Invalid conversion EMPTY"));break;
 	}
 	return NO_ONE;
 }
@@ -55,7 +52,7 @@ Board_state Game::get(unsigned int row, unsigned column) const{
 }
 
 void Game::set_turn(Player player){
-  	current_turn = player;
+  current_turn = player;
 }
 Player Game::get_turn() const{
 	return current_turn;
@@ -85,67 +82,67 @@ unsigned int Game::total_chips() const{
 	else if (this->starter == RED && mod == 1) res = GREEN;
 	else res = RED;
 	return res;
-}*/
+  }*/
 
 Player Game::who_win() const{
-//vertical
+  //vertical
 	for (int i = 0; i<3; i++){
 		for(int j = 0; j<7; j++){
 			if(	(data[i  ][j] != EMPTY) &&
-				(data[i  ][j] == data[i+1][j]) &&
-				(data[i+2][j] == data[i+3][j]) &&
-				(data[i  ][j] == data[i+2][j])){
+          (data[i  ][j] == data[i+1][j]) &&
+          (data[i+2][j] == data[i+3][j]) &&
+          (data[i  ][j] == data[i+2][j])){
 				return Board_state_to_Player(data[i][j]);
 			}
 		} 
 	}
-//horizontal
+  //horizontal
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<4; j++){
 			if(	(data[i  ][j] != EMPTY) &&
-				(data[i  ][j] == data[i][j+1]) &&
-				(data[i][j+2] == data[i][j+3]) &&
-				(data[i  ][j] == data[i][j+2])){
+          (data[i  ][j] == data[i][j+1]) &&
+          (data[i][j+2] == data[i][j+3]) &&
+          (data[i  ][j] == data[i][j+2])){
 				return Board_state_to_Player(data[i][j]);
 			}
 		}
 	} 
 
-//diagonal ascending
+  //diagonal ascending
 	for (int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++){
 			if(	(data[i][j] != EMPTY) &&
-				(data[i  ][j  ] == data[i+1][j+1]) &&
-				(data[i+2][j+2] == data[i+3][j+3]) &&
-				(data[i+1][j+1] == data[i+3][j+3])){
+          (data[i  ][j  ] == data[i+1][j+1]) &&
+          (data[i+2][j+2] == data[i+3][j+3]) &&
+          (data[i+1][j+1] == data[i+3][j+3])){
 				return Board_state_to_Player(data[i][j]);
 				//If they all have the same color, return
 			}
-			
+
 		}
 	}
-//diagonal descending
+  //diagonal descending
 	for (int i = 0; i<3; i++){
 		for(int j = 3; j<7; j++){
 			if(	(data[i][j] != EMPTY) &&
-				(data[i  ][j  ] == data[i+1][j-1]) &&
-				(data[i+2][j-2] == data[i+3][j-3]) &&
-				(data[i+1][j-1] == data[i+3][j-3])){
+          (data[i  ][j  ] == data[i+1][j-1]) &&
+          (data[i+2][j-2] == data[i+3][j-3]) &&
+          (data[i+1][j-1] == data[i+3][j-3])){
 				return Board_state_to_Player(data[i][j]);
 				//If they all have the same color, return
 			}
-			
+
 		}
 	}
 	return NO_ONE;
 }
 
 bool Game::is_over() const{
-	if(	this->who_win() == RED || 
-		this->who_win() == GREEN || 
-		(this->who_win() == NO_ONE &&
-		 this->total_chips() == 42))
-		  return true;
+	if(	this->who_win() == RED ||
+      this->who_win() == GREEN ||
+      (this->who_win() == NO_ONE &&
+       this->total_chips() == 42))
+    return true;
 	return false;
 }
 
@@ -159,7 +156,7 @@ bool Game::is_valid_gravity() const{
 			if(found_empty == false && data[i][j] == EMPTY)found_empty=true;
 		}
 	}
-		
+
 	return true;
 }
 
@@ -175,7 +172,7 @@ bool Game::is_valid_turn_parity() const{
 			if(this->get(i,j) == BS_RED) res_red++;
 			else if (this->get(i,j) == BS_GREEN) res_green++;
 			else current_row--;
-		if (current_row == 0) i = 6;
+      if (current_row == 0) i = 6;
 		}
 	}
 	if (this->starter == RED && (res_red < res_green)) return false;
@@ -191,7 +188,7 @@ bool Game::is_valid_turn_parity() const{
 
 CONNECT4_ERROR Game::is_valid() const{
 	if (!is_valid_gravity()) return GRAVITY;
-	if (!is_valid_turn_parity()) return TURN_PARITY;		
+	if (!is_valid_turn_parity()) return TURN_PARITY;
 	return OK;
 }
 
@@ -202,21 +199,21 @@ bool Game::operator==(const Game &other) const{
 	}
 
 	for (int i = 0; i<6; i++){
-			for(int j = 0; j<7; j++){
-				if (data[i][j] != other.data[i][j]){
-					return false;
-				}
-			}
+    for(int j = 0; j<7; j++){
+      if (data[i][j] != other.data[i][j]){
+        return false;
+      }
+    }
 	}
 	return true;
 }
 
-//Requires 
+//Requires
 int Game::get_first_empty_space(int column){
 
 	for (int i = 0; i<6; i++){
-		if(data[i][column] == EMPTY) return i;	
-		}
+		if(data[i][column] == EMPTY) return i;
+  }
 	return -1;
 }
 
@@ -224,11 +221,10 @@ CONNECT4_ERROR Game::apply(Move m){
 
 	CONNECT4_ERROR game_valid = this->is_valid();
 	CONNECT4_ERROR move_valid = m.is_valid();
-	
+
 	if (game_valid == OK && move_valid == OK){
-		
-	data[get_first_empty_space(m.column)][m.column] = Player_to_Board_state(m.player);
-	if (get_turn() == RED) set_turn(GREEN);
+    data[get_first_empty_space(m.column)][m.column] = Player_to_Board_state(m.player);
+    if (get_turn() == RED) set_turn(GREEN);
 		else set_turn(RED);
 	}
 	else if (move_valid != OK) return move_valid;
@@ -255,10 +251,10 @@ std::ostream& operator<<(std::ostream& os, const Game& c)
   for (int i = 5; i>-1;i--){
   	os << std::endl << "|";
   	for (int j = 0; j<7;j++){
-  	os << c.get(i,j) << "|";
+      os << c.get(i,j) << "|";
   	}
   }
   os << std::endl;
-  
+
   return os;
 }

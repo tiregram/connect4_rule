@@ -8,14 +8,14 @@ struct Move;
 enum Player{
   RED,
   GREEN,
-  NO_ONE
+  NO_ONE,
 };
 
 
 enum Board_state{
+  EMPTY,
   BS_RED,
-  BS_GREEN,
-  EMPTY
+  BS_GREEN
 };
 
 Board_state Player_to_Board_state(Player player);
@@ -29,7 +29,6 @@ enum CONNECT4_ERROR{
   GRAVITY,
   FULL_COLUMN,
   TURN_PARITY
-
 
   //...
 };
@@ -45,15 +44,20 @@ struct Move
 
 struct Game
 {
+private:
   Board_state data[6][7];
   Player starter;
   Player current_turn;
 
+public:
+  //constructor
   Game(Player starter=RED);
+
+  // get and set
 
   void set(unsigned int row, unsigned column,Board_state state);
   Board_state get(unsigned int row, unsigned column) const;
-  
+
   unsigned int total_chips() const;
 
   Player who_win() const;
@@ -62,13 +66,13 @@ struct Game
   void set_turn(Player p);
   Player get_turn() const;
 
-
+  // test
   bool is_over() const;
-
   CONNECT4_ERROR is_valid() const;
 
   bool operator==(const Game &other) const;
 
+  // play
   CONNECT4_ERROR apply(Move m);
   CONNECT4_ERROR play(unsigned int row);
   CONNECT4_ERROR play(std::vector<unsigned int> const &rows);

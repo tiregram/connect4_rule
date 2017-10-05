@@ -20,7 +20,7 @@ enum Board_state{
 
 Board_state Player_to_Board_state(Player player);
 Player Board_state_to_Player(Board_state bs);
-
+std::string Player_name(Player player);
 
 enum CONNECT4_ERROR{
   OK,

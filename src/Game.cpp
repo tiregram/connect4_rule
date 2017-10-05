@@ -24,6 +24,11 @@ Player Board_state_to_Player(Board_state bs){
 	return NO_ONE;
 }
 
+std::string Player_name(Player player){
+	if (player == RED) return "Red";
+	return "Green";
+}
+
 //Default constructor of Move
 Move::Move(unsigned int column,Player player,Game& g):column(column),player(player),g(g){
 }
@@ -282,7 +287,7 @@ CONNECT4_ERROR Game::play(std::vector<unsigned int> const &columns){
 
 //Testing function to output the current game on the terminal
 std::ostream& operator<<(std::ostream& os, const Game& c){
-	os << "Game starter: "<<" Current turn: "<< c.get_turn() << std::endl;
+	os <<"Current turn: "<< Player_name(c.get_turn()) << std::endl;
 	for (int i = 5; i>-1;i--){
   		os << std::endl << "|";
   		for (int j = 0; j<7;j++){

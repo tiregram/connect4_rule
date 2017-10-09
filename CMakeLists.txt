@@ -9,29 +9,28 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
 
 if( NOT ${FOR_NAO})
   set(CMAKE_CXX_STANDARD 11)
+
 endif( NOT ${FOR_NAO})
 
-# message(${CTC_PATH})
-# set(CMAKE_MODULE_PATH ${CTC_PATH})
-# set(CMAKE_FIND_ROOT_PATH ${CTC_PATH})
-# # lib build
 
 file(GLOB_RECURSE C4_FILE_LIB src/*.cpp)
 add_library(c4rule SHARED ${C4_FILE_LIB})
 
-# find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 
-# # UT
-# file(GLOB_RECURSE C4_FILE_UT test/*.cpp)
-# add_executable(c4rule_ut ${C4_FILE_UT})
+if( NOT ${FOR_NAO})
+  set(CMAKE_CXX_STANDARD 11)
+  find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 
-
-# target_link_libraries(c4rule_ut
-#                       ${Boost_FILESYSTEM_LIBRARY}
-#                       ${Boost_SYSTEM_LIBRARY}
-#                       ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-#                       )
-# target_link_libraries(c4rule_ut c4rule)
+  # UT
+  file(GLOB_RECURSE C4_FILE_UT test/*.cpp)
+  add_executable(c4rule_ut ${C4_FILE_UT})
 
 
+  target_link_libraries(c4rule_ut
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    )
+  target_link_libraries(c4rule_ut c4rule)
 
+endif( NOT ${FOR_NAO})

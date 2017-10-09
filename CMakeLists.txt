@@ -26,7 +26,6 @@ if( NOT ${FOR_NAO})
   file(GLOB_RECURSE C4_FILE_UT test/*.cpp)
   add_executable(c4rule_ut ${C4_FILE_UT})
 
-
   target_link_libraries(c4rule_ut
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

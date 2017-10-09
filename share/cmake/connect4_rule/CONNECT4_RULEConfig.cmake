@@ -5,7 +5,7 @@ get_filename_component(_connectrule_root "${_connectrule_root}" ABSOLUTE)
 
 set(
   CONNECT4_RULE_LIBRARIES
-  ${_connectrule_root}/libc4rule.so
+  ${_connectrule_root}/libc4rule.a
   CACHE INTERNAL "" FORCE
 )
 

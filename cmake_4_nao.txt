@@ -1,13 +1,18 @@
 
 if("ruhtra" STREQUAL $ENV{USER})
   SET(CTC_PATH "/home/ruhtra/nao/ctc")
-  SET(CMAKE_CXX_COMPILER "${CTC_PATH}/cross/bin/i686-aldebaran-linux-gnu-g++")
+  
 
-elseif ("lapin" STREQUAL $ENV{USER})
+elseif ("marveen" STREQUAL $ENV{USER})
+  SET(CTC_PATH "/home/marveen/NaoSDK/ctc-linux64-atom-2.1.4.13")
+
   ## add you path with you user name
 
+else ("ruhtra" STREQUAL $ENV{USER})
   message(STATUS "NO USER")
 endif("ruhtra" STREQUAL $ENV{USER})
+
+SET(CMAKE_CXX_COMPILER "${CTC_PATH}/cross/bin/i686-aldebaran-linux-gnu-g++")
 
 
 

@@ -26,7 +26,8 @@ Player Board_state_to_Player(Board_state bs){
 
 std::string Player_name(Player player){
 	if (player == RED) return "Red";
-	return "Green";
+	if (player == GREEN) return "Green";
+	return "No one";
 }
 
 //Default constructor of Move

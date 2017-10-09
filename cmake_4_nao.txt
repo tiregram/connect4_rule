@@ -1,0 +1,8 @@
+
+
+SET(CTC_PATH "/home/ruhtra/nao/ctc")
+
+SET(CMAKE_CXX_COMPILER "${CTC_PATH}/cross/bin/i686-aldebaran-linux-gnu-g++")
+
+
+

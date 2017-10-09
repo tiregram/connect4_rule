@@ -14,7 +14,8 @@ endif( NOT ${FOR_NAO})
 
 
 file(GLOB_RECURSE C4_FILE_LIB src/*.cpp)
-add_library(c4rule SHARED ${C4_FILE_LIB})
+add_library(c4rule_S SHARED ${C4_FILE_LIB})
+add_library(c4rule STATIC ${C4_FILE_LIB})
 
 
 if( NOT ${FOR_NAO})

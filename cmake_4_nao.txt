@@ -5,8 +5,7 @@ if("ruhtra" STREQUAL $ENV{USER})
 
 elseif ("lapin" STREQUAL $ENV{USER})
   ## add you path with you user name
-
-  message(STATUS "NO USER")
+  message(SEND_ERROR "NO USER CONFIGURATION, GO TO THIS position and do modification")
 endif("ruhtra" STREQUAL $ENV{USER})
 
 

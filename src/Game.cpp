@@ -51,6 +51,17 @@ Game::Game(Player starter):starter(starter),current_turn(starter){
 	}
 }
 
+//Copy constructor
+Game::Game(const Game &g){
+	starter = g.starter;
+	current_turn = g.current_turn;
+	for (int i = 0; i<6; i++){
+		for(int j = 0; j<7; j++){
+		set(i,j,g.get(i,j));
+		}
+	}
+}
+
 //Set for position states
 void Game::set(unsigned int row, unsigned column,Board_state state){
 	data[row][column] = state;

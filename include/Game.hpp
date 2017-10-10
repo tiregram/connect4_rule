@@ -8,7 +8,7 @@ struct Move;
 enum Player{
   RED,
   GREEN,
-  NO_ONE,
+  NO_ONE
 };
 
 
@@ -52,6 +52,9 @@ private:
 public:
   //constructor
   Game(Player starter=RED);
+  
+  //copy constructor
+  Game(const Game &g);
 
   // get and set
 
@@ -73,6 +76,7 @@ public:
   bool operator==(const Game &other) const;
   bool possible_posterior_game(const Game &other) const;
 
+  int get_first_empty_space(int column);
   // play
   CONNECT4_ERROR apply(Move m);
   CONNECT4_ERROR play(unsigned int column);
@@ -81,7 +85,7 @@ public:
   private:
   bool is_valid_gravity() const;
   bool is_valid_turn_parity() const;
-  int get_first_empty_space(int column);
+
 };
 
 std::ostream& operator<<(std::ostream& os, const Game& c);

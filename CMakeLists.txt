@@ -5,7 +5,7 @@ if(${FOR_NAO})
   include(cmake_4_nao.txt)
 endif(${FOR_NAO})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -Wno-long-long -pedantic")
 
 if( NOT ${FOR_NAO})
   set(CMAKE_CXX_STANDARD 11)

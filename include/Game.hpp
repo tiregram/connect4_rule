@@ -48,6 +48,8 @@ private:
   Board_state data[6][7];
   Player starter;
   Player current_turn;
+  Player human;
+  Player nao;
 
 public:
   //constructor
@@ -61,14 +63,18 @@ public:
   void set(unsigned int row, unsigned column,Board_state state);
   Board_state get(unsigned int row, unsigned column) const;
 
+  bool is_column_full(int column) const;
   unsigned int total_chips() const;
 
   Player who_win() const;
 
-
-  void set_turn(Player p);
+  void set_turn(Player player);
   Player get_turn() const;
-
+  
+  void set_human(Player player);
+  void set_nao(Player player);
+  Player get_human();
+  Player get_nao();
   // test
   bool is_over() const;
   CONNECT4_ERROR is_valid() const;

@@ -179,6 +179,15 @@ BOOST_AUTO_TEST_CASE(Game_post_prev_Test)
 
   Vui pt = {0,0,1,1,2,2,3,3,4,4};
   gt.play(pt);
+  
+  Game gtcopy(gt);  
+  BOOST_CHECK_EQUAL(gt, gtcopy);
+  /*	 gt.play(0);
+BOOST_CHECK(false==(gt == gtcopy));
+  gt.play(1);
+BOOST_CHECK(false==(gt == gtcopy));*/
+  
+  
 
   for (int i = 0; i < 7; i++) {
     Game gt2 = Game();

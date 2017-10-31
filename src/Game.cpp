@@ -34,10 +34,16 @@ std::string Player_name(Player player){
 Move::Move(unsigned int column,Player player,Game& g):column(column),player(player),g(g){
 }
 
+//Checks if column is full
+bool Game::is_column_full(int column) const{
+ if (get(5,column) != EMPTY) return true;
+ else return false;
+}
+
 //Checks if Move is valid. Returns POSITION if the column is not valid, FULL_COLUMN if the column is full, WRONG_TURN if it's not the correct player, and OK if the play is valid.
 CONNECT4_ERROR Move::is_valid() const{
 	if(column>6) return POSITION;
-	if(g.get(5,column) != EMPTY) return FULL_COLUMN;
+	if(g.is_column_full(column)) return FULL_COLUMN;
 	if(g.get_turn() != player) return WRONG_TURN;
 	return OK;
 }
@@ -54,6 +60,8 @@ Game::Game(Player starter):starter(starter),current_turn(starter){
 //Copy constructor
 Game::Game(const Game &g){
 	starter = g.starter;
+	human = g.human;
+	nao = g.nao;
 	current_turn = g.current_turn;
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<7; j++){
@@ -75,6 +83,19 @@ Board_state Game::get(unsigned int row, unsigned column) const{
 //Set for curent turn
 void Game::set_turn(Player player){
   current_turn = player;
+}
+
+void Game::set_human(Player player){
+	human = player;
+}
+void Game::set_nao(Player player){
+	nao = player;
+}
+Player Game::get_human(){
+	return human;
+}
+Player Game::get_nao(){
+	return nao;
 }
 
 //Get for current turn

@@ -18,9 +18,10 @@ enum Board_state{
   BS_GREEN
 };
 
-Board_state Player_to_Board_state(Player player);
-Player Board_state_to_Player(Board_state bs);
-std::string Player_name(Player player);
+Board_state player_to_board_state(Player player);
+Player board_state_to_Player(Board_state bs);
+std::string player_name(Player player);
+Player opposite_player(Player player);
 
 enum CONNECT4_ERROR{
   OK,
@@ -48,8 +49,6 @@ private:
   Board_state data[6][7];
   Player starter;
   Player current_turn;
-  Player human;
-  Player nao;
 
 public:
   //constructor
@@ -71,10 +70,6 @@ public:
   void set_turn(Player player);
   Player get_turn() const;
   
-  void set_human(Player player);
-  void set_nao(Player player);
-  Player get_human();
-  Player get_nao();
   // test
   bool is_over() const;
   CONNECT4_ERROR is_valid() const;

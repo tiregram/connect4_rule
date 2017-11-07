@@ -5,29 +5,38 @@ Implementation of game mechanics and rules of Connect4 for NAO.
 Project by EPS group I: Marveen Parras, Arthur Margerit and Derek Burrell.
 */
 
-Board_state Player_to_Board_state(Player player){
+//Function to switch from Player to Board_state
+Board_state player_to_board_state(Player player){
 	switch(player){
-  case RED:return BS_RED;break;
-  case GREEN:return BS_GREEN;break;
-  case NO_ONE:throw(std::string("Invalid conversion NO_ONE"));break;
-  }
+		case RED:return BS_RED;break;
+		case GREEN:return BS_GREEN;break;
+		case NO_ONE:throw(std::string("Invalid conversion NO_ONE"));break;
+	}
 	return EMPTY;
 }
 
 //Function to switch from Board_state to Player
-Player Board_state_to_Player(Board_state bs){
+Player board_state_to_player(Board_state bs){
 	switch(bs){
-  case BS_RED:return RED;break;
-  case BS_GREEN:return GREEN;break;
-  case EMPTY:throw(std::string("Invalid conversion EMPTY"));break;
+		case BS_RED:return RED;break;
+		case BS_GREEN:return GREEN;break;
+		case EMPTY:throw(std::string("Invalid conversion EMPTY"));break;
 	}
 	return NO_ONE;
 }
 
-std::string Player_name(Player player){
+//Function to return a string with the name of the Player (for output reasons)
+std::string player_name(Player player){
 	if (player == RED) return "Red";
 	if (player == GREEN) return "Green";
 	return "No one";
+}
+
+//Function to get the opposite of a Player.
+Player opposite_player(Player player){
+	if (player == RED) return GREEN;
+	if (player == GREEN) return RED;
+	return NO_ONE;
 }
 
 //Default constructor of Move
@@ -36,8 +45,8 @@ Move::Move(unsigned int column,Player player,Game& g):column(column),player(play
 
 //Checks if column is full
 bool Game::is_column_full(int column) const{
- if (get(5,column) != EMPTY) return true;
- else return false;
+	if (get(5,column) != EMPTY) return true;
+	else return false;
 }
 
 //Checks if Move is valid. Returns POSITION if the column is not valid, FULL_COLUMN if the column is full, WRONG_TURN if it's not the correct player, and OK if the play is valid.
@@ -60,12 +69,10 @@ Game::Game(Player starter):starter(starter),current_turn(starter){
 //Copy constructor
 Game::Game(const Game &g){
 	starter = g.starter;
-	human = g.human;
-	nao = g.nao;
 	current_turn = g.current_turn;
 	for (int i = 0; i<6; i++){
 		for(int j = 0; j<7; j++){
-		set(i,j,g.get(i,j));
+			set(i,j,g.get(i,j));
 		}
 	}
 }
@@ -82,21 +89,9 @@ Board_state Game::get(unsigned int row, unsigned column) const{
 
 //Set for curent turn
 void Game::set_turn(Player player){
-  current_turn = player;
+	current_turn = player;
 }
 
-void Game::set_human(Player player){
-	human = player;
-}
-void Game::set_nao(Player player){
-	nao = player;
-}
-Player Game::get_human(){
-	return human;
-}
-Player Game::get_nao(){
-	return nao;
-}
 
 //Get for current turn
 Player Game::get_turn() const{
@@ -118,16 +113,7 @@ unsigned int Game::total_chips() const{
 	return res;
 }
 
-/*Player Game::turn() const{
-	int chips = this->total_chips();
-	int mod = chips%2;
-	Player res;
-	if (mod == 0) res = this->starter;
-	else if (this->starter == RED && mod == 1) res = GREEN;
-	else res = RED;
-	return res;
-  }*/
-
+//Function to return who wins the game
 Player Game::who_win() const{
   //vertical
 	for (int i = 0; i<3; i++){
@@ -136,7 +122,7 @@ Player Game::who_win() const{
           (data[i  ][j] == data[i+1][j]) &&
           (data[i+2][j] == data[i+3][j]) &&
           (data[i  ][j] == data[i+2][j])){
-				return Board_state_to_Player(data[i][j]);
+				return board_state_to_player(data[i][j]);
 			}
 		}
 	}
@@ -148,7 +134,7 @@ Player Game::who_win() const{
           (data[i  ][j] == data[i][j+1]) &&
           (data[i][j+2] == data[i][j+3]) &&
           (data[i  ][j] == data[i][j+2])){
-				return Board_state_to_Player(data[i][j]);
+				return board_state_to_player(data[i][j]);
 			}
 		}
 
@@ -162,7 +148,7 @@ Player Game::who_win() const{
           (data[i  ][j  ] == data[i+1][j+1]) &&
           (data[i+2][j+2] == data[i+3][j+3]) &&
           (data[i+1][j+1] == data[i+3][j+3])){
-				return Board_state_to_Player(data[i][j]);
+				return board_state_to_player(data[i][j]);
 				//If they all have the same color, return
 			}
 
@@ -176,7 +162,7 @@ Player Game::who_win() const{
           (data[i  ][j  ] == data[i+1][j-1]) &&
           (data[i+2][j-2] == data[i+3][j-3]) &&
           (data[i+1][j-1] == data[i+3][j-3])){
-				return Board_state_to_Player(data[i][j]);
+				return board_state_to_player(data[i][j]);
 				//If they all have the same color, return
 			}
 
@@ -248,43 +234,44 @@ bool Game::operator==(const Game &other) const{
 	if (starter != other.starter){
 		return false;
 	}
-
 	for (int i = 0; i<6; i++){
-    for(int j = 0; j<7; j++){
-      if (data[i][j] != other.data[i][j]){
-        return false;
-      }
-    }
+		for(int j = 0; j<7; j++){
+			if (data[i][j] != other.data[i][j]){
+				return false;
+			}
+		}
 	}
 	return true;
 }
 
 //Required to check which is the first space the chip can be stored
 int Game::get_first_empty_space(int column){
-
 	for (int i = 0; i<6; i++){
 		if(data[i][column] == EMPTY) return i;
-  }
+	}
 	return -1;
 }
 
 //Applies a move, checking if the move and the game are valid before doing so.
 CONNECT4_ERROR Game::apply(Move m){
-
 	CONNECT4_ERROR game_valid = this->is_valid();
 	CONNECT4_ERROR move_valid = m.is_valid();
 
 	if (game_valid == OK && move_valid == OK){
-    data[get_first_empty_space(m.column)][m.column] = Player_to_Board_state(m.player);
-    if (get_turn() == RED)
-      {set_turn(GREEN);}
-		else
-      { set_turn(RED);}
+    	data[get_first_empty_space(m.column)][m.column] = player_to_board_state(m.player);
+    	if (get_turn() == RED){
+    		set_turn(GREEN);
+    	}
+		else{
+			set_turn(RED);
+		}
 	}
-	else if (move_valid != OK)
-    return move_valid;
-	else if (game_valid != OK)
-    return game_valid;
+	else if (move_valid != OK){
+    	return move_valid;
+    }
+	else if (game_valid != OK){
+    	return game_valid;
+    }
 
 	return OK;
 }
@@ -320,13 +307,22 @@ CONNECT4_ERROR Game::play(std::vector<unsigned int> const &columns){
 
 //Testing function to output the current game on the terminal
 std::ostream& operator<<(std::ostream& os, const Game& c){
-	os <<"Current turn: "<< Player_name(c.get_turn()) << std::endl;
+	os <<"Current turn: "<< player_name(c.get_turn()) << std::endl;
+	os<< "╔═╦═╦═╦═╦═╦═╦═╗";
 	for (int i = 5; i>-1;i--){
-  		os << std::endl << "|";
+  		os << std::endl << "║";
   		for (int j = 0; j<7;j++){
-  			os << c.get(i,j) << "|";
-  		}
-  	}
-  	os << std::endl;
+			if (c.get(i,j) == 1){
+				os << "\033[1;31m◉\033[0m" << "║";
+			}
+			else if (c.get(i,j) == 2){
+				os << "\033[1;32m◉\033[0m" << "║";
+  			}
+			else os <<" ║";
+		}
+	}
+  	  
+	os << std::endl << "╚═╩═╩═╩═╩═╩═╩═╝" <<std::endl;
   	return os;
 }
+
